@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Secure Result Checker</title>
+  <style>
+    body {
+      background-color: #f4f4f4;
+      font-family: 'Courier New', monospace;
+      padding: 20px;
+      max-width: 600px;
+      margin: auto;
+    }
+    h1 {
+      text-align: center;
+    }
+    .box {
+      background: #fff;
+      padding: 20px;
+      box-shadow: 0 0 10px #aaa;
+      border-radius: 8px;
+    }
+    input, button {
+      width: 100%;
+      padding: 10px;
+      margin-top: 10px;
+      font-family: monospace;
+    }
+    #result {
+      margin-top: 20px;
+      padding: 15px;
+      background: #e8ffe8;
+      border: 1px dashed green;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>🔐 Secure Result Checker</h1>
+  <div class="box">
+    <label>Enter Roll Number:</label>
+    <input type="text" id="rollInput" placeholder="e.g. 502223">
+
+    <label>Enter Booklet Number:</label>
+    <input type="text" id="bookletInput" placeholder="e.g. A1" disabled>
+
+    <label>
+      <input type="checkbox" id="robotCheck"> I am not a robot
+    </label>
+
+    <button onclick="checkResult()">Check Result</button>
+
+    <div id="result"></div>
+  </div>
+
+  <script>
+    const correctRoll = "502223";
+    const correctBooklet = "A1";
+    const fileLink = "Final_Premium_Student_Scorecard_absc.pdf";
+
+    document.getElementById('rollInput').addEventListener('input', function() {
+      const roll = this.value.trim();
+      const bookletInput = document.getElementById('bookletInput');
+      if (roll === correctRoll) {
+        bookletInput.disabled = false;
+      } else {
+        bookletInput.disabled = true;
+        document.getElementById('result').innerHTML = '';
+      }
+    });
+
+    function checkResult() {
+      const roll = document.getElementById('rollInput').value.trim();
+      const booklet = document.getElementById('bookletInput').value.trim();
+      const isHuman = document.getElementById('robotCheck').checked;
+      const resultDiv = document.getElementById('result');
+
+      if (!isHuman) {
+        resultDiv.innerHTML = "❌ Please confirm you are not a robot.";
+        return;
+      }
+
+      if (roll === correctRoll && booklet === correctBooklet) {
+        resultDiv.innerHTML = `
+          ✅ Verified!<br>
+          🎓 Student: absc<br>
+          📘 Roll No: ${roll}<br>
+          📝 Booklet: ${booklet}<br><br>
+          <a href="${fileLink}" download>📥 Download Scorecard (PDF)</a>
+        `;
+      } else {
+        resultDiv.innerHTML = "❌ Invalid Roll Number or Booklet Number.";
+      }
+    }
+  </script>
+
+</body>
+</html>
